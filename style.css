@@ -51,7 +51,7 @@ footer
     font-size: 1.2em;
     color: white;
 }
-#options_wrapper
+#options_wrapper, #stats_wrapper
 {
     text-align: center;
 }
@@ -67,6 +67,14 @@ footer
 #options_wrapper li
 {
     margin: 0.5em 0;
+    cursor: pointer;
+}
+#options_wrapper li:hover::after
+{
+    content: '<';
+    position: absolute;
+    margin-left: 15px;
+    animation: wzkaznik 1s linear infinite alternate;
 }
 #radar
 {
@@ -86,6 +94,10 @@ footer
     animation: radar 4s cubic-bezier(1, 0, 0.5, 0.5) infinite;
     opacity: 0%;
 }
+#stats_wrapper
+{
+    display: none;
+}
 
 @keyframes radar 
 {
@@ -100,5 +112,13 @@ footer
     66%
     {
         opacity: 0%;
+    }
+}
+
+@keyframes wzkaznik
+{
+    100%
+    {
+        opacity: 0;
     }
 }
