@@ -65,6 +65,81 @@ nav div
 {
     flex-direction: row-reverse;
 }
+main
+{
+    width: 100%;
+    height: 88vh;
+    display: flex;
+}
+#main_container
+{
+    height: 100%;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+}
+menu
+{
+    width: 100%;
+    height: 12%;
+}
+menu ul
+{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style: none;
+    font-size: 1.25em;
+    font-weight: bolder;
+    text-align: center;
+}
+menu ul li:last-child
+{
+    display: none;
+}
+#inner_container
+{
+    width: 100%;
+    height: 88%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#field
+{
+    width: 55%;
+    aspect-ratio: 1/1;
+    border: 5px solid black;
+    border-radius: 2em;
+}
+#terminal_wrapper
+{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#terminal
+{
+    background-color: var(--color-black);
+    border: clamp(20px, 2.5em, 35px) solid var(--color-grey);
+    border-radius: 1.5em;
+    color: var(--color-green);
+    width: 50%;
+    aspect-ratio: 13/20;
+    box-shadow: rgba(0, 0, 0, 0.25) -0.8em 0.8em 0.8em, #4e4e4e -0.3em 0.3em 0 0.3em;
+    overflow: auto;
+    text-align: center;
+}
+#terminal h1
+{
+    font-size: 2em;
+    font-weight: lighter;
+}
+
 @keyframes wzkaznik
 {
     100%
@@ -73,7 +148,7 @@ nav div
     }
 }
 
-@media screen and (max-width: 700px)
+@media screen and (max-width: 750px)
 {
     .player
     {
@@ -93,5 +168,21 @@ nav div
     .player h2 
     {
         font-size: 0.8em;
+    }
+    #terminal_wrapper
+    {
+        display: none;
+    }
+    #main_container
+    {
+        width: 100%;
+    }
+    menu ul li:last-child
+    {
+        display: block;
+    }
+    menu ul 
+    {
+        font-size: 1em;
     }
 }
