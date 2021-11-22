@@ -15,22 +15,29 @@
     <section id="wrapper">
         <section id="terminal_wrapper">
             <div id="terminal">
+                <section id="start">
+                    <h1>Statki</h1>
+                    <p>Podaj nazwę gracza:</p>
+                    <input type="text" id="name_input" maxlength="20" value="Gracz1">
+                    <p id="name_submit" class="btn">zatwierdź</p>
+                </section>
                 <section id="options_wrapper">
                     <h1>Statki</h1>
                     <ul>
-                        <li id="new_game">nowa gra</li>
-                        <li id="stats">statystyki</li>
-                        <li id="about">o grze</li>
+                        <li id="new_game" class="btn">nowa gra</li>
+                        <li id="stats" class="btn">statystyki</li>
+                        <li id="about" class="btn">o grze</li>
                     </ul>
                 </section>
                 <section id="stats_wrapper">
                     <h1>Statystyki</h1>
                     <ul>
-                        <li>Nazwa użytkownika</li>
+                        <li id="stats_username">Nazwa użytkownika</li>
                         <li>rozegrane gry: 0</li>
                         <li>bilans: 0-0</li>
                         <li>procent wygranych: 0%</li>
                     </ul>
+                    <p id="stats_return" class="btn">powrót</p>
                 </section>
             </div>
         </section>

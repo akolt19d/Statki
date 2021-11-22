@@ -54,27 +54,68 @@ footer
 #options_wrapper, #stats_wrapper
 {
     text-align: center;
+    display: none;
 }
-#options_wrapper h1
+#start
+{
+    text-align: center;
+    line-height: 2em;
+}
+#start h1
+{
+    margin: 0.5em;
+}
+#name_input
+{
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+    border-bottom: 2px solid var(--color-green);
+    color: var(--color-green);
+    font-family: 'IBM Plex Mono', monospace;
+}
+#options_wrapper h1, #stats_wrapper h1, #start h1
 {
     font-size: 3.5em;
 }
-#options_wrapper ul
+#options_wrapper ul, #start ul
 {
     list-style: none;
+    font-size: 1.5em;
+}
+#stats_wrapper ul
+{
+    list-style: none;
+    font-size: 1em;
+}
+#stats_wrapper li:first-child
+{
     font-size: 1.5em;
 }
 #options_wrapper li
 {
     margin: 0.5em 0;
+}
+#stats_wrapper li
+{
+    margin: 0.5em 0;
+    cursor: default;
+}
+/* #options_wrapper li:hover::after, #name_submit:hover::after */
+.btn
+{
     cursor: pointer;
 }
-#options_wrapper li:hover::after
+.btn:hover::after
 {
     content: '<';
     position: absolute;
     margin-left: 15px;
     animation: wzkaznik 1s linear infinite alternate;
+}
+#stats_return
+{
+    margin-top: 2em;
 }
 #radar
 {

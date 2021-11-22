@@ -1,0 +1,97 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+:root
+{
+    --color-black: #000;
+    --color-grey: #525252;
+    --color-green: #00C614;
+}
+body
+{
+    background-color: #7ea3d8;
+    font-family: 'IBM Plex Mono', monospace;
+}
+#wrapper
+{
+    width: 100vw;
+    height: 100vh;
+}
+footer
+{
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+    font-size: 1.2em;
+    color: white;
+}
+nav
+{
+    background-color: var(--color-black);
+    height: 12vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-green);
+}
+nav div
+{
+    width: 25%;
+    height: 100%;
+    display: flex;
+}
+#timer
+{
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#timer h1
+{
+    font-size: 2.5em;
+}
+.player
+{
+    align-items: center;
+}
+.player img
+{
+    height: 90%;
+    margin: 1em;
+}
+.player:last-child
+{
+    flex-direction: row-reverse;
+}
+@keyframes wzkaznik
+{
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+@media screen and (max-width: 700px)
+{
+    .player
+    {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .player:last-child
+    {
+        flex-direction: column;
+    }
+    .player img
+    {
+        height: 70%;
+        margin: 0;
+    }
+    .player h2 
+    {
+        font-size: 0.8em;
+    }
+}
