@@ -18,13 +18,16 @@
                 <section id="start">
                     <h1>Statki</h1>
                     <p>Podaj nazwę gracza:</p>
-                    <input type="text" id="name_input" maxlength="20" value="Gracz1">
+                    <input type="text" id="name_input" maxlength="20">
                     <p id="name_submit" class="btn">zatwierdź</p>
                 </section>
                 <section id="options_wrapper">
                     <h1>Statki</h1>
                     <ul>
-                        <li id="new_game" class="btn">nowa gra</li>
+                        <input type="checkbox" id="ng_chk">
+                        <label for="ng_chk">
+                            <li id="new_game" class="btn">nowa gra</li>
+                        </label>
                         <li id="stats" class="btn">statystyki</li>
                         <li id="about" class="btn">o grze</li>
                     </ul>
@@ -39,12 +42,45 @@
                     </ul>
                     <p id="stats_return" class="btn">powrót</p>
                 </section>
+                <section id="about_wrapper">
+                    <h1>O grze</h1>
+                    <p>
+                        Statki to dwuosobowa gra planszowa, w której dwóch graczy rozmieszcza na swoim polu okręty, po czym próbuje zatopić okręty przeciwnika.
+                        Strona, na której się znajdujesz, przenosi grę z planszy na ekran, pozwalając Ci na grę ze znajomymi w każdym miejscu.  
+                    </p>
+                    <p id="about_return" class="btn">powrót</p>
+                </section>
+                <section id="ng_wrapper">
+                    <h1>Statki</h1>
+                    <h2>Wybierz ustawienia rozgrywki</h2>
+                    <form action="game.html" method="get">
+                        <p>Wybierz ilość statków:</p>
+                        <!-- <select name="ship_num" id="">
+                            <option value="12">12</option>
+                            <option value="10" selected>10</option>
+                            <option value="8">8</option>
+                        </select> -->
+                        <div><input type="radio" name="ship_num" value="8" id="radio1"><label for="radio1">8</label></div>
+                        <div><input type="radio" name="ship_num" value="10" id="radio2" checked><label for="radio2">10</label></div>
+                        <div><input type="radio" name="ship_num" value="12" id="radio3"><label for="radio3">12</label></div>
+                        <p>Wybierz czas trwania rundy (w sekundach):</p>
+                        <input type="text" id="round_time"><br>
+                        <!-- <input type="submit" value="Graj"> -->
+                        <button type="submit" id="ng_play"></button>
+                        <label for="ng_play">
+                            <p class="btn">graj</p>
+                        </label> 
+                        <label for="ng_chk">
+                            <p class="btn">powrót</p>
+                        </label> 
+                    </form>
+                </section>
             </div>
         </section>
         <footer>
             Strona zrobiona przez Adama Kołta
         </footer>
-        <div id="radar"></div>
+        <!-- <div id="radar"></div> -->
     </section>
     <script src="main.js" defer>
     </script>

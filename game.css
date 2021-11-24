@@ -11,8 +11,22 @@
 }
 body
 {
-    background-color: #7ea3d8;
+    /* background-color: #7ea3d8; */
+    background-color: #405677;
+    background-image: url(./images/bg_img.jpg);
+    background-size: cover;
+    background-blend-mode: multiply;
     font-family: 'IBM Plex Mono', monospace;
+}
+::-webkit-scrollbar
+{
+    width: 8px;
+    background-color: var(--color-black);
+}
+::-webkit-scrollbar-thumb
+{
+    border-radius: 4px;
+    background-color: var(--color-green);
 }
 #wrapper
 {
@@ -82,6 +96,7 @@ menu
 {
     width: 100%;
     height: 12%;
+    color: var(--color-green);
 }
 menu ul
 {
@@ -113,6 +128,11 @@ menu ul li:last-child
     aspect-ratio: 1/1;
     border: 5px solid black;
     border-radius: 2em;
+    color: white;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #terminal_wrapper
 {
