@@ -9,7 +9,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet"> 
      
-    <title>Strona główna</title>
+    <title>Gra</title>
+
+    <template>
+        <div id="popup_wrapper">
+            <div id="popup">
+                <section>
+                    <div class="playercard">
+                        <img src="./images/player_icon.png" alt="ikonka gracza">
+                        <h2 id="popup_player_name">Gracz1</h2>
+                    </div>
+                    <h1>vs</h1>
+                    <div class="playercard">
+                        <img src="./images/player_icon.png" alt="ikonka gracza">
+                        <h2 id="popup_opp_name">ELMENOL</h2>
+                    </div>
+                </section>
+                <section>
+                    <h2 id="popup_countdown">root@github:/Statki# </h2>
+                </section>
+            </div>
+        </div>
+    </template>
 </head>
 <body>
     <section id="wrapper">
@@ -48,6 +69,7 @@
                     <p>Gra się rozpoczęła</p>
                 </div>
             </section>
+            
         </main>
         <footer>
             Strona zrobiona przez Adama Kołta

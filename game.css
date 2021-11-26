@@ -159,12 +159,85 @@ menu ul li:last-child
     font-size: 2em;
     font-weight: lighter;
 }
+#popup_wrapper
+{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+#popup
+{
+    width: 35%;
+    aspect-ratio: 1/1;
+    border-radius: 3em;
+    border: 2vw solid var(--color-green);
+    background-color: var(--color-black); 
+    color: var(--color-green);
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    opacity: 0;
+    transition: 1s opacity;
+}
+#popup section
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#popup div
+{
+    text-align: center;
+}
+#popup img
+{
+    width: 80%;
+}
+#popup section:last-child h2::after
+{
+    content: '|';
+    animation: wzkaznik2 1.5s infinite step-start;
+}
+#popup h2
+{
+    font-size: 1.5vw;
+}
+#popup section:last-child h2
+{
+    width: 96%;
+    font-size: 1.25vw;
+}
 
 @keyframes wzkaznik
 {
     100%
     {
         opacity: 0;
+    }
+}
+
+@keyframes wzkaznik2
+{
+    50%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 100%;
+    }
+}
+
+@keyframes vis 
+{
+    100%
+    {
+        opacity: 100%;
     }
 }
 
@@ -204,5 +277,19 @@ menu ul li:last-child
     menu ul 
     {
         font-size: 1em;
+    }
+    #popup
+    {
+        width: 70%;
+        aspect-ratio: 2/3;
+    }
+    #popup h2
+    {
+        font-size: 3.5vw;
+    }
+    #popup section:last-child h2
+    {
+        width: 96%;
+        font-size: 3vw;
     }
 }
