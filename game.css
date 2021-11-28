@@ -122,17 +122,31 @@ menu ul li:last-child
     justify-content: center;
     align-items: center;
 }
+#inner_container button
+{
+    width: 20px;
+    aspect-ratio: 1/1;
+}
 #field
 {
     width: 55%;
     aspect-ratio: 1/1;
-    border: 5px solid black;
-    border-radius: 2em;
+    /* border-radius: 2em;
     color: white;
-    background-color: black;
+    background-color: rgb(9, 41, 2);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    border: 0.2em solid var(--color-green);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+}
+.field_grid
+{
+    border: 0.2em solid var(--color-green);
 }
 #terminal_wrapper
 {
@@ -211,6 +225,38 @@ menu ul li:last-child
 {
     width: 96%;
     font-size: 1.25vw;
+}
+#position_container
+{
+    background-color: var(--color-black);
+    width: 20em;
+    height: 15em;
+    position: absolute;
+    top: 12vh;
+    left: calc(50vw - 10em);
+    border-radius: 0 0 2em 2em;
+    color: var(--color-green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: 2s;
+    transform-origin: top;
+}
+#position_container div
+{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#inner_container > div:last-child
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 5%;
 }
 
 @keyframes wzkaznik
@@ -291,5 +337,9 @@ menu ul li:last-child
     {
         width: 96%;
         font-size: 3vw;
+    }
+    #field
+    {
+        width: 90%;
     }
 }
