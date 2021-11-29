@@ -31,6 +31,33 @@
             </div>
         </div>
     </template>
+    <template>
+        <div id="popup_wrapper">
+            <div id="end_popup">
+                <section>
+                    <h1>Wygrałeś!</h1>
+                </section>
+                <section>
+                    <div class="playercard">
+                        <img src="./images/player_icon.png" alt="ikonka gracza">
+                        <h2 id="end_popup_player_name">Gracz1</h2>
+                    </div>
+                    <h1>vs</h1>
+                    <div class="playercard">
+                        <img src="./images/player_icon.png" alt="ikonka gracza">
+                        <h2 id="end_popup_opp_name">ELMENOL</h2>
+                    </div>
+                </section>
+                <section>
+                    <h2>Wynik:</h2>
+                    <h2>0-0</h2>
+                    <h2>Runda:</h2>
+                    <h2>0</h2>
+                </section>
+                <h2 class="btn" id="exit_game">powrót</h2>
+            </div>
+        </div>
+    </template>
 </head>
 <body>
     <section id="wrapper">
@@ -51,14 +78,18 @@
         <main>
             <section id="main_container">
                 <menu>
-                    <ul>
+                    <!-- <ul>
                         <li>Twoja plansza</li>
                         <li>Plansza przeciwnika</li>
                         <li>Terminal</li>
-                    </ul>
+                    </ul> -->
+                    <h1 id="field_name">Twoja plansza</h1>
                 </menu>
                 <div id="inner_container">
                     <div id="field">
+
+                    </div>
+                    <div id="opp_field">
 
                     </div>
                     <div>
@@ -76,7 +107,13 @@
             
         </main>
         <footer>
-            Strona zrobiona przez Adama Kołta
+            <p>
+                Strona zrobiona przez Adama Kołta
+            </p>
+            <div>
+                <div><input type="radio" name="mobile_window" id="mobile_window1" checked><label for="mobile_window1">Plansza</label></div>
+                <div><input type="radio" name="mobile_window" id="mobile_window2"><label for="mobile_window2">Terminal</label></div>
+            </div>
         </footer>
         <div id="position_container">
             <p>Ułóż statki na planszy:</p>
