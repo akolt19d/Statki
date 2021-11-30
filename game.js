@@ -422,7 +422,7 @@ window.addEventListener('load', () => {
     document.querySelector("#nav_opp_name").innerText = opponent;
     document.querySelector("title").innerText = `${username} vs ${opponent}`;
 
-    //setTimeout(startAnimation, 1250);
+    setTimeout(startAnimation, 1250);
     
     positioningShips()
 
