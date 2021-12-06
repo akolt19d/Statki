@@ -11,6 +11,8 @@ let fleetPosition = [];
 let enemyFleet = generateEnemyFleet();
 let flag = 0;
 let flagSequel = 0;
+let time = roundTime;
+let countdownInterval;
 
 const opponents = ["ELMENOL", "SMILEDOG", "case_meen", "_pikus", "Spectral", "Cheppe", "lewek", "AbcightGaming"];
 const field = document.querySelector("#field")
@@ -25,8 +27,24 @@ function terminalLog(text)
 {
     const p = document.createElement("p")
     p.innerText = text;
+    terminal.scrollTo(0, terminal.scrollHeight);
     terminal.append(p)
 }
+
+document.querySelector("#mobile_window1").addEventListener('change', () => {
+    if(document.querySelector("#mobile_window1").checked)
+    {
+        document.querySelector("#label1").style.color = "var(--color-green)"
+        document.querySelector("#label2").style.color = "var(--color-grey)"
+    }
+})
+document.querySelector("#mobile_window2").addEventListener('change', () => {
+    if(document.querySelector("#mobile_window2").checked)
+    {
+        document.querySelector("#label1").style.color = "var(--color-grey)"
+        document.querySelector("#label2").style.color = "var(--color-green)"
+    }
+})
 
 function startAnimation()
 {
@@ -92,56 +110,108 @@ function generateEnemyFleet()
     {
         fieldNum[i-1] = i
     }
+
     
-    for(let i = 16; i < 20; i+=4)
+    for(let i = 0; i < 4; i+=4)
     {
-        let random = fieldNum[randomInt(fieldNum.length)]
+        let random = randomInt(fieldNum.length - 4)
+        
+        enemyFleet[i] = fieldNum[random]
+        enemyFleet[i+1] = fieldNum[random+1]
+        enemyFleet[i+2] = fieldNum[random+2]
+        enemyFleet[i+3] = fieldNum[random+3]
+        
+        for(let j = 0; j < fieldNum.length; j++)
+        {
+            if(fieldNum[j] == random)
+                fieldNum.splice(j+1, 4)
+        }
+    }
+    console.log(enemyFleet)
+    console.log(fieldNum)
     
-        enemyFleet[i] = random - 1
-        enemyFleet[i+1] = random
-        enemyFleet[i+2] = random + 1
-        enemyFleet[i+3] = random + 2
-
-        fieldNum.splice(random-2, 1)
-        fieldNum.splice(random-1, 1)
-        fieldNum.splice(random, 1)
-        fieldNum.splice(random+1, 1)
-    }
-
-    for(let i = 10; i < 16; i+=3)
+    function generateLength3(i)
     {
-        let random = fieldNum[randomInt(fieldNum.length)]
+        let random = randomInt(fieldNum.length)
+        console.log(random)
 
-        enemyFleet[i] = random - 1
-        enemyFleet[i+1] = random
-        enemyFleet[i+2] = random + 1
+        let randomAvg = (fieldNum[random] + fieldNum[random+1] + fieldNum[random+2]) / 3
 
-        fieldNum.splice(random-2, 1)
-        fieldNum.splice(random-1, 1)
-        fieldNum.splice(random, 1)
+        if(randomAvg == fieldNum[random+1])
+        {
+            enemyFleet[i] = fieldNum[random]
+            enemyFleet[i+1] = fieldNum[random+1]
+            enemyFleet[i+2] = fieldNum[random+2]
+
+            for(let j = 0; j < fieldNum.length; j++)
+            {
+                if(j == random)
+                {
+                    fieldNum.splice(j, 3)
+                }
+            }
+        }
+        else
+        {
+            generateLength3(i);
+        }
     }
 
-    for(let i = 4; i < 10; i+=2)
+    for(let i = 4; i < 10; i+=3)
     {
-        let random = fieldNum[randomInt(fieldNum.length)]
-
-        enemyFleet[i] = random
-        enemyFleet[i+1] = random + 1
-
-        fieldNum.splice(random-1, 1)
-        fieldNum.splice(random, 1)
+        generateLength3(i)
     }
+    console.log(enemyFleet)
+    console.log(fieldNum)
 
-    for(let i = 0; i < 4; i++)
+    function generateLength2(i)
     {
-        let random = fieldNum[randomInt(fieldNum.length)]
-        //console.log(random)
+        let random = randomInt(fieldNum.length)
+        console.log(random)
 
-        enemyFleet[i] = random
-        fieldNum.splice(random-1, 1)
+        if((random+1)-random == fieldNum[random+1]-fieldNum[random])
+        {
+            enemyFleet[i] = fieldNum[random]
+            enemyFleet[i+1] = fieldNum[random+1]
+
+            for(let j = 0; j < fieldNum.length; j++)
+            {
+                if(j == random)
+                {
+                    fieldNum.splice(j, 2)
+                }
+            }
+        }
+        else
+        {
+            generateLength2(i);
+        }
     }
-    //console.log(fieldNum)
-    //console.log(enemyFleet)
+
+    for(let i = 10; i < 16; i+=2)
+    {
+        generateLength2(i)
+    }
+    console.log(enemyFleet)
+    console.log(fieldNum)
+
+    for(let i = 16; i < 20; i++)
+    {
+        let random = randomInt(fieldNum.length)
+        console.log(fieldNum[random])
+
+        enemyFleet[i] = fieldNum[random]
+
+        for(let j = 0; j < fieldNum.length; j++)
+        {
+            if(j == random)
+             {
+                fieldNum.splice(j, 1)
+            }
+        }
+    }
+    console.log(fieldNum)
+    console.log(enemyFleet)
 
     return enemyFleet;
 }
@@ -158,78 +228,100 @@ function oppTurn()
 {
     if(flagSequel == 0)
     {
+        let oppTurnDuration = (randomInt(roundTime - 1) + 1) * 1000;
         document.querySelector("#field").style.display = "grid"
         document.querySelector("#opp_field").style.display = "none"
         document.querySelector("#field_name").innerText = "Twoja plansza"
+        time = roundTime;
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        document.querySelector("#timer h1").innerText = `${minutes}:${seconds}`;
+        time--;
+        countdownInterval = setInterval(countdown, 1000);
 
-        let grids = []
-        let isPlayerField = false;
-        for(let i = 1; i <= 64; i++)
+        function countdown()
         {
-            grids[i-1]=  i;
-        }
-        //console.log(`przed usunięciem: ${grids}`)
-    
-        let oppGuess = grids[randomInt(grids.length)];
-        //console.log(oppGuess)
-    
-        for(let i = 0; i < 64; i++)
-        {
-            if(oppGuess == grids[i])
-                grids.splice(i, 1)
-        }
-    
-        for(let i = 0; i < fleetPosition.length; i++)
-        {
-            if(oppGuess == fleetPosition[i])
+            minutes = Math.floor(time / 60);
+            seconds = time % 60;
+
+            if(seconds < 10)
             {
-                isPlayerField = true;
+                seconds = "0" + seconds;
             }
+
+            document.querySelector("#timer h1").innerText = `${minutes}:${seconds}`;
+            time--;
         }
-    
-        if(isPlayerField)
-        {
-            if(oppGuess < 10)
+
+        setTimeout(() => {
+            let grids = []
+            let isPlayerField = false;
+            for(let i = 1; i <= 64; i++)
             {
-                document.querySelector(`#field_grid0${oppGuess}`).style.backgroundColor = "red"
-                document.querySelector(`#field_grid0${oppGuess}`).style.border = "0.2em solid black"
+                grids[i-1]=  i;
+            }
+            //console.log(`przed usunięciem: ${grids}`)
+        
+            let oppGuess = grids[randomInt(grids.length)];
+            //console.log(oppGuess)
+        
+            for(let i = 0; i < 64; i++)
+            {
+                if(oppGuess == grids[i])
+                    grids.splice(i, 1)
+            }
+        
+            for(let i = 0; i < fleetPosition.length; i++)
+            {
+                if(oppGuess == fleetPosition[i])
+                {
+                    isPlayerField = true;
+                }
+            }
+        
+            if(isPlayerField)
+            {
+                if(oppGuess < 10)
+                {
+                    document.querySelector(`#field_grid0${oppGuess}`).style.backgroundColor = "red"
+                    document.querySelector(`#field_grid0${oppGuess}`).style.border = "0.2em solid black"
+                }
+                else
+                {
+                    document.querySelector(`#field_grid${oppGuess}`).style.backgroundColor = "red"
+                    document.querySelector(`#field_grid${oppGuess}`).style.border = "0.2em solid black"
+                }
+                terminalLog(`${opponent} trafił!`)
+                playerShipsSunk++;
             }
             else
             {
-                document.querySelector(`#field_grid${oppGuess}`).style.backgroundColor = "red"
-                document.querySelector(`#field_grid${oppGuess}`).style.border = "0.2em solid black"
+                if(oppGuess < 10)
+                {
+                    document.querySelector(`#field_grid0${oppGuess}`).style.backgroundColor = "#0a0a0a"
+                    document.querySelector(`#field_grid0${oppGuess}`).style.border = "0.2em solid black"
+                }
+                else
+                {
+                    document.querySelector(`#field_grid${oppGuess}`).style.backgroundColor = "#0a0a0a"
+                    document.querySelector(`#field_grid${oppGuess}`).style.border = "0.2em solid black"
+                }
+                terminalLog(`${opponent} nie trafił.`)
             }
-            terminalLog(`${opponent} zatopił statek!`)
-            playerShipsSunk++;
-        }
-        else
-        {
-            if(oppGuess < 10)
-            {
-                document.querySelector(`#field_grid0${oppGuess}`).style.backgroundColor = "#0e0e0e"
-                document.querySelector(`#field_grid0${oppGuess}`).style.border = "0.2em solid black"
-            }
-            else
-            {
-                document.querySelector(`#field_grid${oppGuess}`).style.backgroundColor = "#0e0e0e"
-                document.querySelector(`#field_grid${oppGuess}`).style.border = "0.2em solid black"
-            }
-            terminalLog(`${opponent} nie trafił.`)
-        }
-        //console.log(`po usunięciu: ${grids}`)
-        //console.log(`Wynik: ${oppShipsSunk} - ${playerShipsSunk}`)
-    
-        gameOver = isGameOver()
-        flag = 0;
-        setTimeout(playerTurn, 2000);
-        flagSequel++
-        //console.log(flag)
+
+            clearInterval(countdownInterval);
+            gameOver = isGameOver()
+            flag = 0;
+            setTimeout(playerTurn, 2000);
+            flagSequel++
+        }, oppTurnDuration);
     }
 }
 
 function selectOppField(e){
     let clickedField = parseInt(e.currentTarget.id[e.currentTarget.id.length - 2]+e.currentTarget.id[e.currentTarget.id.length - 1])
     let isOppField = false;
+    clearInterval(countdownInterval);
 
     for(let j = 0; j < enemyFleet.length; j++)
     {
@@ -241,7 +333,7 @@ function selectOppField(e){
     {
         e.currentTarget.style.backgroundColor = "var(--color-green)"
         e.currentTarget.style.border = "0.2em solid black"
-        terminalLog(`${username} zatopił statek!`)
+        terminalLog(`${username} trafił!`)
         oppShipsSunk++;
     }
     else
@@ -260,7 +352,6 @@ function selectOppField(e){
     flagSequel = 0;
     setTimeout(oppTurn, 2000);
     flag++
-    //console.log(flagSequel)
 }
 
 function playerTurn()
@@ -272,6 +363,40 @@ function playerTurn()
         document.querySelector("#field_name").innerText = "Plansza przeciwnika"
         roundNum++;
         document.querySelector("#timer h3").innerText = `runda ${roundNum}`
+        time = roundTime;
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+        document.querySelector("#timer h1").innerText = `${minutes}:${seconds}`;
+        time--;
+        countdownInterval = setInterval(countdown, 1000);
+
+        function countdown()
+        {
+            minutes = Math.floor(time / 60);
+            seconds = time % 60;
+
+            if(seconds < 10)
+            {
+                seconds = "0" + seconds;
+            }
+
+            document.querySelector("#timer h1").innerText = `${minutes}:${seconds}`;
+            time--;
+
+            if(seconds == "00" && minutes == 0)
+            {
+                for(let j = 0; j < 64; j++)
+                {
+                    document.querySelectorAll(".opp_field_grid")[j].removeEventListener('click', selectOppField)
+                }
+                terminalLog(`${username} nie oddał strzału.`)
+                flagSequel = 0;
+                setTimeout(oppTurn, 1000)
+                flag++
+                clearInterval(countdownInterval)
+            }
+        }
+
         for(let i = 0; i < 64; i++)
             document.querySelectorAll(".opp_field_grid")[i].addEventListener('click', selectOppField)
     }
@@ -356,6 +481,7 @@ function positioningShips()
         document.querySelectorAll("#position_container div p")[i].addEventListener('click', (e)=>{
             let shipAmount = parseInt(e.currentTarget.innerText[0])
             let shipSize = parseInt(e.currentTarget.innerText[e.currentTarget.innerText.length-1])
+
             
             if(shipAmount == 0)
             {
@@ -365,12 +491,22 @@ function positioningShips()
             else
             {
                 //console.log(shipSize)
+                if(window.innerWidth > 750)
+                {
+                    document.querySelector("#position_container").style.height = "7.5em"
+                }
+                document.querySelector("#rotation_container").style.display = "flex"
                 
                 for(let i = 0; i < 64; i++)
                 {
                     let startingPosition = 0;
                     document.querySelectorAll(".field_grid")[i].addEventListener('click', function positioningShips(e){
                         startingPosition = parseInt(e.currentTarget.id[e.currentTarget.id.length - 2] + e.currentTarget.id[e.currentTarget.id.length - 1]);
+                        if(window.innerWidth > 750)
+                        {
+                            document.querySelector("#position_container").style.height = "15em"
+                        }
+                        document.querySelector("#rotation_container").style.display = "none"
                         
                         for(let i = startingPosition; i < startingPosition + shipSize * rotation; i += rotation)
                         {
@@ -403,8 +539,8 @@ function positioningShips()
                             document.querySelector("#position_container").style.opacity = 0;
                             setTimeout(() => {
                                 document.querySelector("#position_container").style.display = "none";
+                                startGame = true;
                             }, 2000);
-                            startGame = true;
                         }
                     })
                 }

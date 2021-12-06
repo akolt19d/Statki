@@ -167,11 +167,12 @@ menu ul li:last-child
 {
     border: 0.2em solid var(--color-green);
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.8s ease-in-out background-color, 0.3s filter;
 }
 .field_grid:hover, .opp_field_grid:hover
 {
-    background-color: rgba(0, 0, 0, 0.8);;
+    /* background-color: rgba(0, 0, 0, 0.8); */
+    filter: brightness(60%);
 }
 #terminal_wrapper
 {
@@ -288,8 +289,8 @@ menu ul li:last-child
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    transition: 2s opacity;
-    transform-origin: top;
+    transition: 0.3s height;
+    /* transform-origin: top; */
 }
 #position_container div
 {
@@ -304,7 +305,7 @@ menu ul li:last-child
 
 #inner_container > div:last-child
 {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -324,6 +325,21 @@ menu ul li:last-child
 footer > div
 {
     display: none;
+}
+input[type='radio']
+{
+    display: none;
+}
+#rotation_container button
+{
+    background-color: var(--color-black);
+    border: 2px solid var(--color-green);
+    color: var(--color-green);
+    cursor: pointer;
+}
+#rotation_container button:last-child
+{
+    transform: rotate(90deg);
 }
 
 @keyframes wzkaznik
@@ -379,14 +395,14 @@ footer > div
     {
         font-size: 0.8em;
     }
-    #terminal_wrapper
+    /* #terminal_wrapper
     {
         display: none;
-    }
-    #main_container
+    } */
+    /* #main_container
     {
         width: 100%;
-    }
+    } */
     menu ul li:last-child
     {
         display: block;
@@ -411,7 +427,7 @@ footer > div
     }
     #position_container
     {
-        height: 10em;
+        height: 5em;
     }
     #field, #opp_field
     {
@@ -445,17 +461,42 @@ footer > div
         align-items: center;
         color: var(--color-grey);
     }
-    footer > div input
+    /* footer > div input:checked ~ label
+    {
+        color: var(--color-green);
+    } */
+    #mobile_window1:checked ~ #main_container
+    {
+        width: 100%;
+    }
+    #mobile_window1:checked ~ #terminal_wrapper
     {
         display: none;
     }
-    footer > div input:checked ~ label
+    #mobile_window2:checked ~ #main_container
     {
-        color: var(--color-green);
+        display: none;
     }
-    footer > div label
+    #mobile_window2:checked ~ #terminal_wrapper
+    {
+        display: flex;
+        width: 100%;
+    }
+    #mobile_window2:checked ~ #terminal_wrapper #terminal
+    {
+        width: 65%;
+    }
+    footer div label
     {
         transition: 0.3s color;
         font-weight: bolder;
+    }
+    #label1
+    {
+        color: var(--color-green);
+    }
+    #label2
+    {
+        color: var(--color-grey);
     }
 }
