@@ -173,6 +173,7 @@ menu ul li:last-child
 {
     /* background-color: rgba(0, 0, 0, 0.8); */
     filter: brightness(60%);
+    border: 0.2em solid var(--color-green);
 }
 #terminal_wrapper
 {

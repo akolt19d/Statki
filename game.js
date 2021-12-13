@@ -14,6 +14,12 @@ let flagSequel = 0;
 let time = roundTime;
 let countdownInterval;
 
+let cookies = document.cookie.split("=")
+let ratio = cookies[1]
+
+let wins = parseInt(ratio.split("-")[0])
+let losses = parseInt(ratio.split("-")[1])
+
 const opponents = ["ELMENOL", "SMILEDOG", "case_meen", "_pikus", "Spectral", "Cheppe", "lewek", "AbcightGaming"];
 const field = document.querySelector("#field")
 const terminal = document.querySelector("#terminal")
@@ -86,9 +92,19 @@ function isFleetFull()
     let shipSum = 0;
     let isFull = false;
 
-    for(let i = 0; i < 4; i++)
+    if(shipsNum == "8")
     {
-        shipSum += parseInt(document.querySelectorAll("#position_container div p")[i].innerText[0])
+        for(let i = 0; i < 3; i++)
+        {
+            shipSum += parseInt(document.querySelectorAll("#position_container div p")[i].innerText[0])
+        } 
+    }
+    else
+    {
+        for(let i = 0; i < 4; i++)
+        {
+            shipSum += parseInt(document.querySelectorAll("#position_container div p")[i].innerText[0])
+        }
     }
 
     //console.log(shipSum)
@@ -111,29 +127,49 @@ function generateEnemyFleet()
         fieldNum[i-1] = i
     }
 
-    
-    for(let i = 0; i < 4; i+=4)
+    function generateLength4(i)
     {
         let random = randomInt(fieldNum.length - 4)
-        
-        enemyFleet[i] = fieldNum[random]
-        enemyFleet[i+1] = fieldNum[random+1]
-        enemyFleet[i+2] = fieldNum[random+2]
-        enemyFleet[i+3] = fieldNum[random+3]
-        
-        for(let j = 0; j < fieldNum.length; j++)
+        let isValid = true;
+        console.log(fieldNum[random])
+
+        if(fieldNum[random+3] - fieldNum[random] != 3)
+            isValid = false;
+
+        if(isValid == true)
         {
-            if(fieldNum[j] == random)
-                fieldNum.splice(j+1, 4)
+            enemyFleet[i] = fieldNum[random]
+            enemyFleet[i+1] = fieldNum[random+1]
+            enemyFleet[i+2] = fieldNum[random+2]
+            enemyFleet[i+3] = fieldNum[random+3]
+
+            for(let j = 0; j < fieldNum.length; j++)
+            {
+                if(j == fieldNum[random])
+                {
+                    fieldNum.splice(j, 4)
+                }
+            }
         }
+        else
+        {
+            generateLength4(i);
+        }
+
+        console.log(isValid)
     }
-    console.log(enemyFleet)
-    console.log(fieldNum)
+    
+    for(let i = 0; i < 8; i+=4)
+    {
+        generateLength4(i);
+    }
+    //console.log(enemyFleet)
+    //console.log(fieldNum)
     
     function generateLength3(i)
     {
         let random = randomInt(fieldNum.length)
-        console.log(random)
+        //console.log(random)
 
         let randomAvg = (fieldNum[random] + fieldNum[random+1] + fieldNum[random+2]) / 3
 
@@ -157,17 +193,17 @@ function generateEnemyFleet()
         }
     }
 
-    for(let i = 4; i < 10; i+=3)
+    for(let i = 8; i < 14; i+=3)
     {
         generateLength3(i)
     }
-    console.log(enemyFleet)
-    console.log(fieldNum)
+    // //console.log(enemyFleet)
+    // //console.log(fieldNum)
 
     function generateLength2(i)
     {
         let random = randomInt(fieldNum.length)
-        console.log(random)
+        //console.log(random)
 
         if((random+1)-random == fieldNum[random+1]-fieldNum[random])
         {
@@ -188,17 +224,17 @@ function generateEnemyFleet()
         }
     }
 
-    for(let i = 10; i < 16; i+=2)
+    for(let i = 14; i < 20; i+=2)
     {
         generateLength2(i)
     }
-    console.log(enemyFleet)
-    console.log(fieldNum)
+    // //console.log(enemyFleet)
+    // //console.log(fieldNum)
 
-    for(let i = 16; i < 20; i++)
+    for(let i = 20; i < 25; i++)
     {
         let random = randomInt(fieldNum.length)
-        console.log(fieldNum[random])
+        //console.log(fieldNum[random])
 
         enemyFleet[i] = fieldNum[random]
 
@@ -210,7 +246,17 @@ function generateEnemyFleet()
             }
         }
     }
-    console.log(fieldNum)
+
+    if(shipsNum != "12")
+    {
+        enemyFleet.splice(0, 4)
+        enemyFleet.splice(enemyFleet.length - 1, 1)
+        if(shipsNum == "8")
+        {
+            enemyFleet.splice(0, 7)
+        }
+    }
+    //console.log(fieldNum)
     console.log(enemyFleet)
 
     return enemyFleet;
@@ -222,6 +268,12 @@ function isGameOver()
         return true;
     else
         return false;
+}
+
+let grids = []
+for(let i = 1; i <= 64; i++)
+{
+    grids[i-1]=  i;
 }
 
 function oppTurn()
@@ -254,12 +306,7 @@ function oppTurn()
         }
 
         setTimeout(() => {
-            let grids = []
             let isPlayerField = false;
-            for(let i = 1; i <= 64; i++)
-            {
-                grids[i-1]=  i;
-            }
             //console.log(`przed usunięciem: ${grids}`)
         
             let oppGuess = grids[randomInt(grids.length)];
@@ -278,6 +325,7 @@ function oppTurn()
                     isPlayerField = true;
                 }
             }
+            //console.log(`po usunięciu: ${grids}`)
         
             if(isPlayerField)
             {
@@ -293,6 +341,7 @@ function oppTurn()
                 }
                 terminalLog(`${opponent} trafił!`)
                 playerShipsSunk++;
+                terminalLog(`Wynik: ${oppShipsSunk} - ${playerShipsSunk}`)
             }
             else
             {
@@ -321,38 +370,52 @@ function oppTurn()
 function selectOppField(e){
     let clickedField = parseInt(e.currentTarget.id[e.currentTarget.id.length - 2]+e.currentTarget.id[e.currentTarget.id.length - 1])
     let isOppField = false;
-    clearInterval(countdownInterval);
-
-    for(let j = 0; j < enemyFleet.length; j++)
+    let isAlreadyGuessed = false;
+    for(let j = 0; j < playerGuesses.length; j++)
     {
-        if(clickedField == enemyFleet[j])
-            isOppField = true;
+        if(playerGuesses[j] == clickedField)
+            isAlreadyGuessed = true;
     }
 
-    if(isOppField)
+    if(!isAlreadyGuessed)
     {
-        e.currentTarget.style.backgroundColor = "var(--color-green)"
-        e.currentTarget.style.border = "0.2em solid black"
-        terminalLog(`${username} trafił!`)
-        oppShipsSunk++;
+        clearInterval(countdownInterval);
+    
+        for(let j = 0; j < enemyFleet.length; j++)
+        {
+            if(clickedField == enemyFleet[j])
+                isOppField = true;
+        }
+    
+        if(isOppField)
+        {
+            e.currentTarget.style.backgroundColor = "var(--color-green)"
+            e.currentTarget.style.border = "0.2em solid black"
+            terminalLog(`${username} trafił!`)
+            oppShipsSunk++;
+            terminalLog(`Wynik: ${oppShipsSunk} - ${playerShipsSunk}`)
+        }
+        else
+        {
+            e.currentTarget.style.backgroundColor = "red"
+            e.currentTarget.style.border = "0.2em solid black"
+            terminalLog(`${username} nie trafił.`)
+        }
+    
+        for(let j = 0; j < 64; j++)
+        {
+            document.querySelectorAll(".opp_field_grid")[j].removeEventListener('click', selectOppField)
+        }
+    
+        playerGuesses[playerGuesses.length] = clickedField
+        gameOver = isGameOver();
+        flagSequel = 0;
+        setTimeout(oppTurn, 2000);
+        flag++
     }
-    else
-    {
-        e.currentTarget.style.backgroundColor = "red"
-        e.currentTarget.style.border = "0.2em solid black"
-        terminalLog(`${username} nie trafił.`)
-    }
-
-    for(let j = 0; j < 64; j++)
-    {
-        document.querySelectorAll(".opp_field_grid")[j].removeEventListener('click', selectOppField)
-    }
-
-    gameOver = isGameOver();
-    flagSequel = 0;
-    setTimeout(oppTurn, 2000);
-    flag++
 }
+
+let playerGuesses = []
 
 function playerTurn()
 {
@@ -413,12 +476,19 @@ function gameOverAnimation()
     if(playerShipsSunk > oppShipsSunk)
     {
         document.querySelector("#end_popup section:first-child h1").innerText = "Przegrałeś :("
+        losses++;
+    }
+    else
+    {
+        wins++;
     }
     document.querySelector("#end_popup_player_name").innerText = username
     document.querySelector("#end_popup_opp_name").innerText = opponent
     document.querySelector("#end_popup section:last-of-type h2:nth-child(2)").innerText = `${oppShipsSunk}-${playerShipsSunk}`
     document.querySelector("#end_popup section:last-of-type h2:last-child").innerText = `${roundNum}`
     document.querySelector("#end_popup").style.animation = "vis 1s linear forwards";
+    let days = 60 * 60 * 24 * 90
+    document.cookie = `${cookies[0]}=${wins}-${losses};max-age=${days}`
     document.querySelector("#exit_game").addEventListener('click', () => {
         window.location.replace("./index.html");
     })
@@ -426,7 +496,7 @@ function gameOverAnimation()
 
 function gameLoop()
 {
-    console.log(enemyFleet)
+    //console.log(enemyFleet)
     
     playerTurn()
 
@@ -472,16 +542,15 @@ function positioningShips()
         document.querySelector("#opp_field").append(div);
     }
     
-    let rotation = 8;
     document.querySelector("#rt_right").addEventListener('click', () => { rotation = 1 })
     document.querySelector("#rt_bottom").addEventListener('click', () => { rotation = 8 })
-
+    
     for(let i = 0; i < 4; i++)
     {
         document.querySelectorAll("#position_container div p")[i].addEventListener('click', (e)=>{
-            let shipAmount = parseInt(e.currentTarget.innerText[0])
-            let shipSize = parseInt(e.currentTarget.innerText[e.currentTarget.innerText.length-1])
-
+            shipAmount = parseInt(e.currentTarget.innerText[0])
+            shipSize = parseInt(e.currentTarget.innerText[e.currentTarget.innerText.length-1])
+            
             
             if(shipAmount == 0)
             {
@@ -499,55 +568,131 @@ function positioningShips()
                 
                 for(let i = 0; i < 64; i++)
                 {
-                    let startingPosition = 0;
-                    document.querySelectorAll(".field_grid")[i].addEventListener('click', function positioningShips(e){
-                        startingPosition = parseInt(e.currentTarget.id[e.currentTarget.id.length - 2] + e.currentTarget.id[e.currentTarget.id.length - 1]);
-                        if(window.innerWidth > 750)
-                        {
-                            document.querySelector("#position_container").style.height = "15em"
-                        }
-                        document.querySelector("#rotation_container").style.display = "none"
-                        
-                        for(let i = startingPosition; i < startingPosition + shipSize * rotation; i += rotation)
-                        {
-                            //console.log(i);
-                            if(i <= 9)
-                            {
-                                document.querySelector(`#field_grid0${i}`).style.backgroundColor = "var(--color-green)";
-                                document.querySelector(`#field_grid0${i}`).style.border = "0.2em solid black";
-                            }
-                            else 
-                            {
-                                document.querySelector(`#field_grid${i}`).style.backgroundColor = "var(--color-green)";
-                                document.querySelector(`#field_grid${i}`).style.border = "0.2em solid black";
-                            }
-                            fleetPosition[fleetPosition.length] = i;
-                        }
-                        
-                        for(let i = 0; i < 64; i++)
-                        {
-                            document.querySelectorAll(".field_grid")[i].removeEventListener('click', positioningShips)
-                        }
-                        
-                        startingPosition = 0;
-                        shipAmount = 0;
-                        shipSize = 0;
-                        let isFull = isFleetFull()
-                        if(isFull == true)
-                        {
-                            document.querySelector("#inner_container > div:last-child").style.display = "none";
-                            document.querySelector("#position_container").style.opacity = 0;
-                            setTimeout(() => {
-                                document.querySelector("#position_container").style.display = "none";
-                                startGame = true;
-                            }, 2000);
-                        }
-                    })
+                    document.querySelectorAll(".field_grid")[i].addEventListener('click', pickShip)
+                    document.querySelectorAll(".field_grid")[i].addEventListener('mouseover', showShipPosition)
+                }
+
+                for(let i = 0; i < fleetPosition.length; i++)
+                {
+                    if(fleetPosition[i] < 10)
+                    {
+                        document.querySelectorAll(`.field_grid`)[fleetPosition[i] - 1].removeEventListener('click', pickShip)
+                        //console.log(fleetPosition[i] - 1)
+                    }
+                    else
+                    {
+                        document.querySelectorAll(`.field_grid`)[fleetPosition[i] - 1].removeEventListener('click', pickShip)
+                        //console.log(fleetPosition[i] - 1)
+                    }
                 }
                 shipAmount = parseInt(e.currentTarget.innerText[0])
                 e.currentTarget.innerText = `${shipAmount-1}x${shipSize}`;
             }
         });
+    }
+}
+
+let startingPosition = 0;
+let rotation = 8;
+let shipAmount, shipSize;
+
+function pickShip(e){
+    startingPosition = parseInt(e.currentTarget.id[e.currentTarget.id.length - 2] + e.currentTarget.id[e.currentTarget.id.length - 1]);
+    let temp1 = shipAmount;
+    let temp2 = shipSize;
+    
+    if(rotation == 8 && startingPosition <= 64 - (8 * (shipSize-1)) || (rotation == 1 && startingPosition <= 64 - (shipSize-1)))
+    {
+        //console.log(startingPosition)
+        //console.log(64 - (8 * (shipSize-1)))
+        if(window.innerWidth > 750)
+        {
+            document.querySelector("#position_container").style.height = "15em"
+        }
+        document.querySelector("#rotation_container").style.display = "none"
+        
+        for(let i = startingPosition; i < startingPosition + shipSize * rotation; i += rotation)
+        {
+            //console.log(i);
+            if(i <= 9)
+            {
+                document.querySelector(`#field_grid0${i}`).style.backgroundColor = "var(--color-green)";
+                document.querySelector(`#field_grid0${i}`).style.border = "0.2em solid black";
+            }
+            else 
+            {
+                document.querySelector(`#field_grid${i}`).style.backgroundColor = "var(--color-green)";
+                document.querySelector(`#field_grid${i}`).style.border = "0.2em solid black";
+            }
+            fleetPosition[fleetPosition.length] = i;
+        }
+        
+        for(let i = 0; i < 64; i++)
+        {
+            document.querySelectorAll(".field_grid")[i].removeEventListener('click', pickShip)
+            document.querySelectorAll(".field_grid")[i].removeEventListener('mouseover', showShipPosition)
+            document.querySelectorAll(".field_grid")[i].style.filter = "none"
+        }
+        
+        startingPosition = 0;
+        shipAmount = 0;
+        shipSize = 0;
+    }
+    else
+    {
+        shipAmount = temp1;
+        shipSize = temp2;
+    }
+    let isFull = isFleetFull()
+    if(isFull == true)
+    {
+        document.querySelector("#inner_container > div:last-child").style.display = "none";
+        document.querySelector("#position_container").style.opacity = 0;
+        // for(let i = 0; i < 64; i++)
+        // {
+        //     document.querySelectorAll(".field_grid")[i].style.border = "0"
+        //     document.querySelectorAll(".opp_field_grid")[i].style.border = "0"
+        //     document.querySelectorAll(".field_grid:hover")[i].style.border = "0.2em solid var(--color-green)"
+        //     document.querySelectorAll(".opp_field_grid:hover")[i].style.border = "0.2em solid var(--color-green)"
+        // }
+        setTimeout(() => {
+            document.querySelector("#position_container").style.display = "none";
+            startGame = true;
+        }, 2000);
+    }
+}
+
+function showShipPosition(e)
+{
+    let hoverPosition = parseInt(e.currentTarget.id[e.currentTarget.id.length - 2] + e.currentTarget.id[e.currentTarget.id.length - 1]);
+
+    if(rotation == 8 && hoverPosition <= 64 - (8 * (shipSize-1)) || (rotation == 1 && hoverPosition <= 64 - (shipSize-1)))
+    {
+        for(let i = hoverPosition; i < hoverPosition + shipSize * rotation; i += rotation)
+            {
+                //console.log(i);
+                if(i <= 9)
+                {
+                    document.querySelector(`#field_grid0${i}`).style.filter = "brightness(20%)";
+                }
+                else 
+                {
+                    document.querySelector(`#field_grid${i}`).style.filter = "brightness(20%)";
+                }
+            }
+        e.currentTarget.addEventListener('mouseout', () => {
+            for(let i = hoverPosition; i < hoverPosition + shipSize * rotation; i += rotation)
+            {
+                if(i <= 9)
+                {
+                    document.querySelector(`#field_grid0${i}`).style.filter = "brightness(100%)"
+                }
+                else 
+                {
+                    document.querySelector(`#field_grid${i}`).style.filter = "brightness(100%)"
+                }
+            }
+        })
     }
 }
 
@@ -558,7 +703,26 @@ window.addEventListener('load', () => {
     document.querySelector("#nav_opp_name").innerText = opponent;
     document.querySelector("title").innerText = `${username} vs ${opponent}`;
 
-    setTimeout(startAnimation, 1250);
+    setTimeout(() => {
+        switch (shipsNum) {
+            case "8":
+                document.querySelectorAll("#position_container div p")[1].innerText = "3x2"
+                document.querySelectorAll("#position_container div p")[2].innerText = "1x3"
+                document.querySelectorAll("#position_container div p")[3].remove();
+                break;
+            case "12":
+                document.querySelectorAll("#position_container div p")[0].innerText = "5x1"
+                document.querySelectorAll("#position_container div p")[1].innerText = "3x2"
+                document.querySelectorAll("#position_container div p")[2].innerText = "2x3"
+                document.querySelectorAll("#position_container div p")[3].innerText = "2x4"
+                break;
+            default:
+                break;
+        }
+        //console.log(document.querySelectorAll("#position_container div p")[0].innerText)
+    }, 10)
+
+    //setTimeout(startAnimation, 1250);
     
     positioningShips()
 

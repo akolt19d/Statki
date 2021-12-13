@@ -14,6 +14,7 @@ const ngCheckbox = document.querySelector("#ng_chk");
 const aboutWrapper = document.querySelector("#about_wrapper");
 const ngWrapper = document.querySelector("#ng_wrapper");
 const form = document.querySelector("#ng_wrapper form");
+let isFirstTime = true;
 
 function returnToMain()
 {
@@ -26,7 +27,10 @@ nameSubmit.addEventListener('click', () => {
     username = nameInput.value;
     document.querySelector("#start").style.display = "none"
     document.querySelector("#stats_username").innerText = username;
+    localStorage.setItem("isFirstTime", false)
     optionsWrapper.style.display = "block";
+    let days = 60 * 60 * 24 * 90
+    document.cookie = `ratio=0-0;max-age=${days}`
 })
 
 stats.addEventListener('click', () => {
@@ -68,6 +72,42 @@ ngCheckbox.addEventListener('change', ()=> {
                 optionsWrapper.style.display = "block";
             }, 1000);
         }
+})
+
+window.addEventListener('load', () => {
+    isFirstTime = localStorage.getItem("isFirstTime")
+    if(isFirstTime)
+    {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#stats_username").innerText = username;
+        optionsWrapper.style.display = "block";
+    }
+
+    if(document.cookie)
+    {
+        let cookies = document.cookie.split("=")
+        let ratio = cookies[1]
+
+        let wins = parseInt(ratio.split("-")[0])
+        let losses = parseInt(ratio.split("-")[1])
+        let gamesPlayed = wins + losses
+        let winPercentage;
+        if(losses == 0)
+        {
+            winPercentage = wins * 100;
+        }
+        else
+        {
+            winPercentage = Math.floor((wins / losses) * 100)
+        }
+
+        //console.log(`${gamesPlayed}, ${ratio}, ${winPercentage}`)
+
+        document.querySelector("#games_played").innerText = `rozegrane gry: ${gamesPlayed}`
+        document.querySelector("#ratio").innerText = `bilans: ${ratio}`
+        document.querySelector("#win_percentage").innerText = `procent wygranych: ${winPercentage}%`
+    }
+    //console.log(isFirstTime)
 })
 
 form.addEventListener('submit', () => {
